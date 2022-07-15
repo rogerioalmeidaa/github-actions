@@ -1,4 +1,4 @@
-name: "01. Main Workflow"
+name: "01. Automatic Workflow"
 
 on:
   push:
