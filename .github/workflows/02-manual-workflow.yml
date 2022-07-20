@@ -4,10 +4,12 @@ on:
   workflow_dispatch:
 
 env:
+  BRANCH: ${{ github.ref_name }}
   ACCOUNT_NAME: helloworld
   ELB_APP_NAME_SAMPLE: sample-banking-api
-  ELB_ENV_NAME_SAMPLE_PRODUCTION: sample-bank-production-api
-  ELB_ENV_NAME_SAMPLE_QA: sample-bank-qa-api
+  ELB_ENV_NAME_SAMPLE_PRODUCTION: sample-bank-helloworld-production-api
+  ELB_ENV_NAME_SAMPLE_QA: sample-bank-helloworld-qa-api
+  APP_VERSION: ${{ github.sha }}
 
 jobs:
 
@@ -18,20 +20,21 @@ jobs:
       - name: "Logging Configuration"
         shell: bash
         run: |
+        
           echo "------------------------------ Deploy Settings------------------------------ "
-          echo Branch: ${{ github.ref_name }}
+          echo Branch: $BRANCH
           echo Account Name: $ACCOUNT_NAME
-          echo Version: ${{ github.sha }}
+          echo Version: $APP_VERSION
 
           echo "------------------------------ AWS Settings------------------------------ "
           echo Beanstalk Application Name: $ELB_APP_NAME_SAMPLE
           echo Beanstalk Environment Name: $ELB_ENV_NAME_SAMPLE_QA
-          echo Beanstalk Application Version: ${{ github.sha }}
+          echo Beanstalk Application Version: $APP_VERSION
   
   deploy:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: "Deploying changes into Production environment"
+      - name: "Deploying changes"
         shell: bash
         run: "echo Deploy successfully"
