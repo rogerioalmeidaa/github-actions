@@ -15,7 +15,6 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: set-account
     steps:
       - name: "Logging Configuration"
         shell: bash
