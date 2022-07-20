@@ -6,8 +6,6 @@ on:
       - "rc/*-*"
 
 env:
-  ELB_APP_NAME_SAMPLE: sample-bank-{0}-api
-  ELB_ENV_NAME_SAMPLE: sample-bank-{0}-{1}-api
   APP_VERSION: ${{ github.sha }}
 
 jobs:
@@ -41,8 +39,8 @@ jobs:
           echo Env: ${{ needs.set-account.outputs.APP_ENV }}
           echo Build Commit Version: $APP_VERSION
           echo "------------------------------ AWS Settings------------------------------ "
-          echo Beanstalk Application Name: "${{ format($ELB_APP_NAME_SAMPLE, needs.set-account.outputs.ACCOUNT_NAME) }}"
-          echo Beanstalk Environment Name: "${{ format($ELB_ENV_NAME_SAMPLE, needs.set-account.outputs.ACCOUNT_NAME, needs.set-account.outputs.APP_ENV) }}"
+          echo Beanstalk Application Name: "${{ format('sample-bank-{0}-api', needs.set-account.outputs.ACCOUNT_NAME) }}"
+          echo Beanstalk Environment Name: "${{ format('sample-bank-{0}-{1}-api', needs.set-account.outputs.ACCOUNT_NAME, needs.set-account.outputs.APP_ENV) }}"
           echo Beanstalk Application Release: $APP_VERSION
   
   deploy:
