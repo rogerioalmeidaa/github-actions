@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 
 env:
+  BRANCH: ${{ github.ref_name }}
   ACCOUNT_NAME: helloworld
   ELB_APP_NAME_SAMPLE: sample-banking-api
   ELB_ENV_NAME_SAMPLE_PRODUCTION: sample-bank-helloworld-production-api
@@ -21,13 +22,14 @@ jobs:
         run: |
         
           echo "------------------------------ Deploy Settings------------------------------ "
+          echo Branch: $BRANCH
           echo Account Name: $ACCOUNT_NAME
           echo Version: $APP_VERSION
 
           echo "------------------------------ AWS Settings------------------------------ "
           echo Beanstalk Application Name: $ELB_APP_NAME_SAMPLE
           echo Beanstalk Environment Name: $ELB_ENV_NAME_SAMPLE_QA
-          echo Beanstalk Application Release: $APP_VERSION
+          echo Beanstalk Application Version: $APP_VERSION
   
   deploy:
     runs-on: ubuntu-latest
