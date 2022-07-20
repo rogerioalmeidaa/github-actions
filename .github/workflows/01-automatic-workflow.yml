@@ -3,12 +3,10 @@ name: "01. Automatic Workflow"
 on:
   push:
     branches:
-      - "rc/*@*"
+      - "rc/*-*"
 
 env:
-  ELB_APP_NAME_SAMPLE: sample-banking-api
-  ELB_ENV_NAME_SAMPLE_PRODUCTION: sample-bank-production-api
-  ELB_ENV_NAME_SAMPLE_QA: sample-bank-qa-api
+  APP_VERSION: ${{ github.sha }}
 
 jobs:
   set-account:
@@ -25,31 +23,30 @@ jobs:
     outputs:
       BRANCH: ${{ steps.account-configuration.outputs.BRANCH }}
       ACCOUNT_NAME: ${{ steps.account-configuration.outputs.ACCOUNT_NAME }}
-      APP_VERSION: ${{ steps.account-configuration.outputs.APP_VERSION }}
+      ACCOUNT_NAME_UPPERCASE: ${{ steps.account-configuration.outputs.ACCOUNT_NAME_UPPERCASE }}
+      APP_ENV: ${{ steps.account-configuration.outputs.APP_ENV }}
 
   test:
     runs-on: ubuntu-latest
     needs: set-account
     steps:
       - name: "Logging Configuration"
-        if: ${{ github.event_name == 'push' }}
         shell: bash
         run: |
-          echo "------------------------------ Deploy Settings------------------------------ "
+          echo "------------------------------ Deploy Settings ------------------------------ "
           echo Branch: ${{ needs.set-account.outputs.BRANCH }}
           echo Account Name: ${{ needs.set-account.outputs.ACCOUNT_NAME }}
-          echo Version: ${{ needs.set-account.outputs.APP_VERSION }}
-
+          echo Env: ${{ needs.set-account.outputs.APP_ENV }}
+          echo Build Commit Version: $APP_VERSION
           echo "------------------------------ AWS Settings------------------------------ "
-          echo Beanstalk Application Name: $ELB_APP_NAME_SAMPLE
-          echo Beanstalk Environment Name: $ELB_ENV_NAME_SAMPLE_QA
-          echo Beanstalk Application Version: ${{ needs.set-account.outputs.APP_VERSION }}
+          echo Beanstalk Application Name: "${{ format('sample-bank-{0}-api', needs.set-account.outputs.ACCOUNT_NAME) }}"
+          echo Beanstalk Environment Name: "${{ format('sample-bank-{0}-{1}-api', needs.set-account.outputs.ACCOUNT_NAME, needs.set-account.outputs.APP_ENV) }}"
+          echo Beanstalk Application Release: $APP_VERSION
   
   deploy:
     runs-on: ubuntu-latest
     needs: [set-account, test]
     steps:
       - name: "Deploying changes"
-        if: ${{ github.event_name == 'push' }}
         shell: bash
         run: "echo Deploy successfully"
