@@ -3,11 +3,14 @@ name: "03. Automatic Workflow"
 on:
   workflow_dispatch:
   push:
+    branches:
+      - "master"
     tags:
       - "*"
 
 env:
-  TRIGGER: ${{ github.ref_name }}
+  REF_NAME: ${{ github.ref_name }}
+  REF: ${{ github.ref }}
 
 jobs:
 
@@ -18,8 +21,16 @@ jobs:
         shell: bash
         run: |
           echo "------------------------------ Deploy Settings------------------------------ "
-          echo Activation: $TRIGGER
+          echo Ref Name: $REF_NAME
+          echo Ref: $REF
           echo Trigger Name: $GITHUB_EVENT_NAME
+
+      - name: Define Beanstalk Environment Name QA
+        run: echo "beanstalkEnvironmentName=QA >> $GITHUB_ENV
+
+      - name: Define Beanstalk Environment Name Production
+        run: echo "beanstalkEnvironmentName=Production >> $GITHUB_ENV
+        if: contains(fromJson('["v*"]'), github.ref_name)
   
   deploy:
     runs-on: ubuntu-latest
