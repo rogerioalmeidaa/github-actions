@@ -3,7 +3,10 @@ name: "03. Automatic Workflow"
 on:
   workflow_dispatch:
   push:
-    branches: ["master", "refs/tags/v*"]
+    branches: 
+      - "master"
+    tags:
+      - "*"
 
 env:
   REF_NAME: ${{ github.ref_name }}
