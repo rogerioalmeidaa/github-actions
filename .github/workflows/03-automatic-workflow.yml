@@ -1,0 +1,29 @@
+name: "03. Automatic Workflow"
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "*"
+
+env:
+  TRIGGER: ${{ github.ref_name }}
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Logging Configuration"
+        shell: bash
+        run: |
+          echo "------------------------------ Deploy Settings------------------------------ "
+          echo Trigger: $TRIGGER
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: "Deploying changes"
+        shell: bash
+        run: "echo Deploy successfully"
