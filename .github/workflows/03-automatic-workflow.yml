@@ -26,10 +26,10 @@ jobs:
           echo Trigger Name: $GITHUB_EVENT_NAME
 
       - name: Define Beanstalk Environment Name QA
-        run: echo "QA" >> $GITHUB_ENV
+        run: echo QA >> $GITHUB_ENV
 
       - name: Define Beanstalk Environment Name Production
-        run: echo "Production" >> $GITHUB_ENV
+        run: echo Production >> $GITHUB_ENV
         if: contains(fromJson('["v*"]'), github.ref_name)
   
   deploy:
