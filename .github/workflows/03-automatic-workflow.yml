@@ -18,7 +18,8 @@ jobs:
         shell: bash
         run: |
           echo "------------------------------ Deploy Settings------------------------------ "
-          echo Trigger: $TRIGGER
+          echo Activation: $TRIGGER
+          echo Trigger Name: $GITHUB_EVENT_NAME
   
   deploy:
     runs-on: ubuntu-latest
