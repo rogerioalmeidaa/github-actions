@@ -30,7 +30,7 @@ jobs:
 
       - name: Define Beanstalk Environment Name Production
         run: echo "Production"
-        if: contains(fromJson('["v*"]'), github.ref_name)
+        if: contains(fromJson('["refs/tags/v*"]'), github.ref)
   
   deploy:
     runs-on: ubuntu-latest
