@@ -3,10 +3,7 @@ name: "03. Automatic Workflow"
 on:
   workflow_dispatch:
   push:
-    branches:
-      - "master"
-    tags:
-      - "*"
+    branches: ["master", "refs/tags/v*"]
 
 env:
   REF_NAME: ${{ github.ref_name }}
@@ -30,7 +27,7 @@ jobs:
 
       - name: Define Beanstalk Environment Name Production
         run: echo "Production"
-        if: contains('refs/tags/v', github.ref)
+        if: contains(github.ref, 'refs/tags/v')
   
   deploy:
     runs-on: ubuntu-latest
